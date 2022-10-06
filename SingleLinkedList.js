@@ -67,6 +67,8 @@ class SingleLinkedList {
         }
     }
 
+    // TODO:: searchByValue()  // Only for singular value like [Number, String]
+
     searchByIndex(index, type = null) {
       let count = 0;
       let current = this.head;
