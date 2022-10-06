@@ -30,23 +30,30 @@ class SingleLinkedList {
     }
 
     insertAtIndex(data, index) {
-
-        const node = new Node(data);
-        let previous; 
-        let current = this.head; 
-        let count = 0;
-
-        while(count < index) {
-            previous = current;
-            count++; 
-            current = current.next; 
-        }
-        if(previous?.next) {
+        try {
+            const node = new Node(data);
+            let previous; 
+            let current = this.head; 
+            let count = 0;
+    
+            while(count < index) {
+                previous = current;
+                count++; 
+                if(!current?.next) {
+                    throw new Error("Invalid index to insert data...!!");    
+                }
+                current = current.next; 
+            }
+            if(!previous?.next) {
+                throw new Error("Invalid index to insert data...!!");    
+            }
             node.next = current; 
             previous.next = node;
             this.size++;
-        } else {
-            console.log("Index Not Exists...!!");
+            return index;
+        }catch(e) {
+            console.log(e.message);
+            return null;
         }
     }
 
@@ -60,9 +67,56 @@ class SingleLinkedList {
         }
     }
 
-    // TODO:: Search()
+    searchByIndex(index, type = null) {
+      let count = 0;
+      let current = this.head;
+      let foundData = null;
+      while(current) {
+        if (count === index) {
+            if(type && type === "node") {
+                foundData = current;
+            } else {
+                foundData = current.data;
+            }
+          break;
+        }
+        count++;
+        current = current.next
+      }
+      if(!foundData) {
+        return null;
+      }
+      return foundData;
+    }
 
-    // TODO:: Remove()
+    remove(index) {
+        try {
+            let current = this.head;
+            let previous;
+            let count = 0;
+            if(index === 0) {
+              this.head = current.next;
+            } else {
+                while (count < index) {
+                    count++;
+                    previous = current;
+                    if(!current?.next) {
+                        throw new Error("Invalid index to remove data...!!");
+                    }
+                    current = current.next;
+                }
+                if(!previous?.next) {
+                    throw new Error("Invalid index to remove data...!!");
+                }
+                previous.next = current.next
+                this.size--;
+            }
+            return index;
+        }catch(e) {
+            console.log(e.message)
+            return null;
+        }
+    }
 }
 
 
@@ -74,6 +128,10 @@ singleLinkedList.push(30);
 singleLinkedList.push(20);
 singleLinkedList.push(10);
 singleLinkedList.insertAtIndex(40, 1);
-singleLinkedList.print()
+// singleLinkedList.remove(3);
 
-console.log("Linked List ===> ", JSON.stringify(singleLinkedList));
+singleLinkedList.print();
+console.log("SearchByIndex Result ===> ", singleLinkedList.searchByIndex(2, "node"));
+
+
+// console.log("Linked List ===> ", JSON.stringify(singleLinkedList));
